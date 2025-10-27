@@ -10,4 +10,4 @@ try:
     LOGGER(__name__).info("Connected to your Mongo Database.")
 except Exception as e:
     LOGGER(__name__).error(f"Failed to connect to your Mongo Database: {e}")
-    exit() 
+    exit()
