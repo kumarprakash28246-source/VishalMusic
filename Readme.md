@@ -27,7 +27,7 @@
 </p>
 
 <h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Dark+Bolt&color=FF69B4&width=500&lines=Welcome+to+Shruti+Music+%F0%9F%8E%B6+The+Robot;Your+Ultimate+Telegram+Music+Bot" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Dark+Bolt&color=FF69B4&width=500&lines=Welcome+to+Vaishali+Music+%F0%9F%8E%B6+The+Robot;Your+Ultimate+Telegram+Music+Bot+made+by+»»—⎯⁠⁠⁠⁠‌꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »" />
 </h1>
 
 <p align="center">
@@ -274,7 +274,7 @@ Platform Deploy Link
   <a href="https://t.me/Its_me_Vishall">
     <img src="https://img.shields.io/badge/Contact_Owner-Telegram-4CAF50?style=for-the-badge&logo=telegram&logoColor=white" />
   </a>
-  <a href="https://t.me/Shrutimusic_bot">
+  <a href="https://t.me/VaishalixMusic_Robot">
     <img src="https://img.shields.io/badge/Use_Bot-Telegram-FF69B4?style=for-the-badge&logo=telegram&logoColor=white" />
   </a>
 </p>
