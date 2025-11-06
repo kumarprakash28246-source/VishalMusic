@@ -27,7 +27,7 @@
 </p>
 
 <h1 align="center">
-  <img src="https://readme-typing-svg.herokuapp.com?font=Dark+Bolt&color=FF69B4&width=500&lines=Welcome+to+Vaishali+Music+%F0%9F%8E%B6+The+Robot;Your+Ultimate+Telegram+Music+Bot+made+by+»»—⎯⁠⁠⁠⁠‌꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »" />
+  <img src="https://readme-typing-svg.herokuapp.com?font=Dark+Bolt&color=FF69B4&width=500&lines=Welcome+to+Vaishali+Music+%F0%9F%8E%B6+The+Robot;Your+Ultimate+Telegram+Music+Bot" />
 </h1>
 
 <p align="center">
