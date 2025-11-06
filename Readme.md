@@ -32,12 +32,12 @@
 
 <p align="center">
   <a href="https://t.me/Its_me_Vishall">
-    <img src="https://files.catbox.moe/48shlf.jpg" width="600">
+    <img src="[https://files.catbox.moe/48shlf.jpg](https://files.catbox.moe/vaf7jq.jpg)" width="600">
   </a>
 </p>
 
 <p align="center">
-  <a href="https://t.me/Shrutimusic_bot"><img src="https://img.shields.io/badge/Try%20Bot-@Shrutimusic_bot-blue?style=for-the-badge&logo=telegram"/></a>
+  <a href="https://t.me/VaishalixMusic_Robot"><img src="https://img.shields.io/badge/Try%20Bot-@Shrutimusic_bot-blue?style=for-the-badge&logo=telegram"/></a>
 </p>
 
 
