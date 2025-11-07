@@ -3,7 +3,7 @@ from pyrogram.types import Message
 
 from config import BANNED_USERS
 from VISHALMUSIC import app
-from VISHALMUSIC.core.call import JARVIS
+from VISHALMUSIC.core.call import VISHAL
 from VISHALMUSIC.utils.database import group_assistant
 from VISHALMUSIC.utils.admin_filters import admin_filter
 
@@ -12,7 +12,7 @@ from VISHALMUSIC.utils.admin_filters import admin_filter
 async def vc_info(client, message: Message):
     chat_id = message.chat.id
     try:
-        assistant = await group_assistant(JARVIS, chat_id)
+        assistant = await group_assistant(VISHAL, chat_id)
         participants = await assistant.get_participants(chat_id)
 
         if not participants:

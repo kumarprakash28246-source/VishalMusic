@@ -2,7 +2,7 @@ from pyrogram import filters
 from pyrogram.types import Message
 
 from VISHALMUSIC import YouTube, app
-from VISHALMUSIC.core.call import JARVIS
+from VISHALMUSIC.core.call import VISHAL
 from VISHALMUSIC.misc import db
 from VISHALMUSIC.utils import AdminRightsCheck, seconds_to_min
 from VISHALMUSIC.utils.inline import close_markup
@@ -56,7 +56,7 @@ async def seek_comm(cli, message: Message, _, chat_id):
     if "index_" in file_path:
         file_path = playing[0]["vidid"]
     try:
-        await JARVIS.seek_stream(
+        await VISHAL.seek_stream(
             chat_id,
             file_path,
             seconds_to_min(to_seek),
