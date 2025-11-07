@@ -6,7 +6,7 @@ from pyrogram.types import InlineKeyboardMarkup
 
 import config
 from VISHALMUSIC import Carbon, YouTube, app
-from VISHALMUSIC.core.call import JARVIS
+from VISHALMUSIC.core.call import VISHAL
 from VISHALMUSIC.misc import db
 from VISHALMUSIC.utils.database import add_active_video_chat, is_active_chat
 from VISHALMUSIC.utils.exceptions import AssistantErr
@@ -38,7 +38,7 @@ async def stream(
     is_video = bool(video)
 
     if forceplay:
-        await JARVIS.force_stop_stream(chat_id)
+        await VISHAL.force_stop_stream(chat_id)
 
     if streamtype == "playlist":
         msg = f"{_['play_19']}\n\n"
@@ -88,7 +88,7 @@ async def stream(
                 if not file_path:
                     raise AssistantErr(_["play_14"])
 
-                await JARVIS.join_call(
+                await VISHAL.join_call(
                     chat_id,
                     original_chat_id,
                     file_path,
@@ -182,7 +182,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await JARVIS.join_call(
+            await VISHAL.join_call(
                 chat_id,
                 original_chat_id,
                 file_path,
@@ -246,7 +246,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await JARVIS.join_call(chat_id, original_chat_id, file_path, video=False)
+            await VISHAL.join_call(chat_id, original_chat_id, file_path, video=False)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -301,7 +301,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await JARVIS.join_call(chat_id, original_chat_id, file_path, video=is_video)
+            await VISHAL.join_call(chat_id, original_chat_id, file_path, video=is_video)
             await put_queue(
                 chat_id,
                 original_chat_id,
@@ -361,7 +361,7 @@ async def stream(
             if not file_path:
                 raise AssistantErr(_["play_14"])
 
-            await JARVIS.join_call(
+            await VISHAL.join_call(
                 chat_id,
                 original_chat_id,
                 file_path,
@@ -421,7 +421,7 @@ async def stream(
         else:
             if not forceplay:
                 db[chat_id] = []
-            await JARVIS.join_call(
+            await VISHAL.join_call(
                 chat_id,
                 original_chat_id,
                 link,
