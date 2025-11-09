@@ -59,7 +59,7 @@ It also includes **basic group management features** for convenience.
 <table>
 <tr>
 <td>
-  <img src="https://files.catbox.moe/la0sxq.jpg" width="300" />
+  <img src="https://files.catbox.moe/al3dtb.mp4" width="300" />
 </td>
 <td>
 
