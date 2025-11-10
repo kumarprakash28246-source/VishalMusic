@@ -13,7 +13,7 @@
     <div style="background: #000; border-radius: 20px; padding: 15px; position: relative;">
       <!-- VIDEO PLAYER -->
       <video width="700" autoplay loop muted playsinline style="border-radius: 15px; box-shadow: 0 0 50px rgba(255, 20, 147, 0.5);">
-        <source src="https://files.catbox.moe/qibmue.mp4" type="video/mp4">
+        <source src="https://files.catbox.moe/h9dan0.jpg" type="video/mp4">
         Your browser does not support the video tag.
       </video>
 
@@ -67,38 +67,14 @@
     <tr>
       <td width="50%" valign="top">
 
-🎵 AUDIO EXCELLENCE
-
-· ✨ Studio Quality 320kbps Audio
-· 🎧 Lag-Free HD Streaming
-· 🔥 High Definition Sound
-· ⚡ Instant Playback Start
-· 🎚️ Audio Effects & Equalizer
-
-🌐 MULTI-PLATFORM SUPPORT
-
-· 📺 YouTube Music Integration
-· 🍎 Apple Music Full Support
-· 🎶 Spotify Playback Compatible
-· ☁️ SoundCloud & Resso Support
-· 📻 JioSaavn & Deezer Ready
-  
-
-🛠️ SMART MANAGEMENT
-
-· 👮 Auto Group Management
-· 🎨 Elegant User Interface
-· 🔒 Military Grade Security
-· 🤖 24/7 Active Availability
-· 📊 Real-time Performance Analytics
-
 🚀 ADVANCED PERFORMANCE
 
 · ⚡ Lightning Fast Responses
-· 💾 Memory Optimized Operation
-· 🔄 Auto Recovery System
-· 🗃️ Smart Queue Management
-· 🌙 Background Operation Ready
+· 👮 Auto Group Management
+· 🎧 Lag-Free HD Streaming
+· 🔥 High Definition Sound
+· ⚡ Instant Playback Start
+· 🤖 24/7 Active Availability
     </tr>
     </table>
 
@@ -317,7 +293,7 @@ tmux kill-session -t vaishali-music  # Terminate session
 </p>
 
 <div align="center">
-  <p><em>✨ Crafted with passion and dedication by <a href="https://t.me/Its_me_Vishall" style="color: #FF1493; text-decoration: none; font-weight: bold;">Vishal</a> ✨</em></p>
+  <p><em>✨ Crafted with passion and dedication by <a href="https://t.me/Its_me_Vishall" style="color: #FF1493; text-decoration: none; font-weight: bold;">»»—⎯⁠⁠⁠⁠‌꯭꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</a> ✨</em></p>
 </div>
 
 ---
