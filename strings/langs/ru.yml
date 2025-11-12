@@ -200,8 +200,8 @@ queue_7: "\n📋 Нажмите кнопку ниже, чтобы получит
 queue_8: "🎵 <b>{0} плеер</b>\n\n🎶 <b>Стрим:</b> {1}\n\n🔗 <b>Тип потока:</b> {2}\n👤 <b>Запрошено:</b> {3}\n{4}"
 
 # 🎵 Начало трансляции
-stream_1: "➲ <b>Начато воспроизведение |</b>\n<blockquote>⊱⋆⊳ <b>Название:</b> <a href='{0}'>{1}</a>\n⊱⋆⊳ <b>Длительность:</b> {2} минут\n⊱⋆⊳ <b>Запрошено:</b> {3}</blockquote>\n<blockquote>⚡ <b>Создано:</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</blockquote>"
-stream_2: "➲ <b>Начато воспроизведение |</b>\n<blockquote>⊱⋆⊳ <b>Тип потока:</b> прямая трансляция [URL]\n⊱⋆⊳ <b>Запрошено:</b> {0}</blockquote>\n<blockquote>⚡ <b>Создано:</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</blockquote>"
+stream_1: "➲ <b>Начато воспроизведение |</b>\n<blockquote>⊱⋆⊳ <b>Название:</b> <a href='{0}'>{1}</a>\n⊱⋆⊳ <b>Длительность:</b> {2} минут\n⊱⋆⊳ <b>Запрошено:</b> {3}</blockquote>\n<blockquote>⚡ <b>Создано:</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</a></blockquote>"
+stream_2: "➲ <b>Начато воспроизведение |</b>\n<blockquote>⊱⋆⊳ <b>Тип потока:</b> прямая трансляция [URL]\n⊱⋆⊳ <b>Запрошено:</b> {0}</blockquote>\n<blockquote>⚡ <b>Создано:</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</a></blockquote>"
 
 # 🔘 Кнопки
 S_B_1: "✨ ДОБАВЬ МЕНЯ ✨"

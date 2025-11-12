@@ -200,8 +200,8 @@ queue_7: "\n📋 Tüm kuyruk listesini görmek için aşağıdaki düğmeye tık
 queue_8: "🎵 <b>{0} oynatıcı</b>\n\n🎶 <b>Yayınlanıyor :</b> {1}\n\n🔗 <b>Yayın türü :</b> {2}\n👤 <b>İsteyen :</b> {3}\n{4}"
 
 # 🎵 Yayın Başladı
-stream_1: "➲ <b>Yayın Başlatıldı |</b>\n<blockquote>⊱⋆⊳ <b>Başlık :</b> <a href='{0}'>{1}</a>\n⊱⋆⊳ <b>Süre :</b> {2} dakika\n⊱⋆⊳ <b>İsteyen :</b> {3}</blockquote>\n<blockquote>⚡ <b>Yapan :</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</blockquote>"
-stream_2: "➲ <b>Yayın Başlatıldı |</b>\n<blockquote>⊱⋆⊳ <b>Yayın türü :</b> canlı yayın [URL]\n⊱⋆⊳ <b>İsteyen :</b> {0}</blockquote>\n<blockquote>⚡ <b>Yapan :</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</blockquote>"
+stream_1: "➲ <b>Yayın Başlatıldı |</b>\n<blockquote>⊱⋆⊳ <b>Başlık :</b> <a href='{0}'>{1}</a>\n⊱⋆⊳ <b>Süre :</b> {2} dakika\n⊱⋆⊳ <b>İsteyen :</b> {3}</blockquote>\n<blockquote>⚡ <b>Yapan :</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</a></blockquote>"
+stream_2: "➲ <b>Yayın Başlatıldı |</b>\n<blockquote>⊱⋆⊳ <b>Yayın türü :</b> canlı yayın [URL]\n⊱⋆⊳ <b>İsteyen :</b> {0}</blockquote>\n<blockquote>⚡ <b>Yapan :</b> <a href='https://t.me/Its_me_vishall'>»»—⎯꯭νιѕнαL𝅃 ₊꯭♡゙꯭. »</a></blockquote>"
 
 # 🔘 Düğmeler
 S_B_1: "✨ BENİ EKLE ✨"
