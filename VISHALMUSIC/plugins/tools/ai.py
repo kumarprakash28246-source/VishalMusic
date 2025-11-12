@@ -1,114 +1,141 @@
+# ANNIEMUSIC/plugins/tools/ai.py
 import os
 import base64
 import mimetypes
-
+import aiohttp
+import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction
-
-from lexica import AsyncClient, languageModels, Messages
 from VISHALMUSIC import app
+from dotenv import load_dotenv
 
+# -------------------------
+# 🔐 Load environment variables
+# -------------------------
+load_dotenv()
+OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
+if not OPENROUTER_KEY:
+    raise ValueError("❌ OpenRouter key not found! Please set OPENROUTER_KEY in your .env file.")
+
+# ---------------------------
+# 🔧 Helper: fetch GPT response from OpenRouter
+# ---------------------------
+async def get_gpt_response(prompt: str, model: str = "gpt-3.5-turbo") -> str:
+    """Fetch GPT response from OpenRouter API"""
+    try:
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+            "HTTP-Referer": "https://t.me/VaishalxMusic_robot",
+            "X-Title": "VishalxMusic",
+        }
+        data = {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+
+        async with aiohttp.ClientSession() as session:
+            async with session.post(OPENROUTER_URL, headers=headers, json=data, timeout=60) as resp:
+                if resp.status != 200:
+                    text = await resp.text()
+                    raise Exception(f"API Error {resp.status}: {text}")
+                result = await resp.json()
+                # Safely extract the response text
+                choice = result.get("choices")
+                if not choice or not isinstance(choice, list):
+                    raise Exception("No choices in API response.")
+                message = choice[0].get("message") or choice[0].get("text") or {}
+                if isinstance(message, dict):
+                    if "content" in message:
+                        if isinstance(message["content"], dict) and "parts" in message["content"]:
+                            return "\n".join(message["content"]["parts"])
+                        return message["content"]
+                    if "text" in message:
+                        return message["text"]
+                return str(message)
+    except Exception as e:
+        raise Exception(f"❌ GPT Error: {e}")
+
+# ---------------------------
 def get_prompt(message: Message) -> str | None:
-    parts = message.text.split(' ', 1)
+    parts = message.text.split(" ", 1)
     return parts[1] if len(parts) > 1 else None
 
-
-def extract_content(response) -> str | None:
-    content = response.get('content')
-    if isinstance(content, str):
-        return content
-    elif isinstance(content, list):
-        return '\n'.join(item['text'] for item in content if isinstance(item, dict) and 'text' in item)
-    elif isinstance(content, dict):
-        if 'parts' in content and isinstance(content['parts'], list):
-            return '\n'.join(part.get('text', '') for part in content['parts'] if 'text' in part)
-        return content.get('text')
-    return None
-
-
 def format_response(model_name: str, content: str) -> str:
-    return f"**ᴍᴏᴅᴇʟ:** `{model_name}`\n\n**ʀᴇsᴘᴏɴsᴇ:**\n{content}"
+    return f"**🤖 Model:** `{model_name}`\n\n**🧠 Response:**\n{content}"
 
-
-async def handle_text_model(message: Message, model, model_name: str, as_messages=False):
+# ---------------------------
+async def handle_text_model(message: Message, model_name: str):
     prompt = get_prompt(message)
     if not prompt:
-        return await message.reply_text("Please provide a prompt after the command.")
+        return await message.reply_text("❌ Please provide a prompt after the command.")
 
     await message._client.send_chat_action(message.chat.id, ChatAction.TYPING)
+    status = await message.reply_text("💬 Thinking...")
 
-    lexica_client = AsyncClient()
     try:
-        data = [Messages(content=prompt, role="user")] if as_messages else prompt
-        response = await lexica_client.ChatCompletion(data, model)
-        content = extract_content(response)
-        await message.reply_text(format_response(model_name, content) if content else "No content received from the API.")
+        content = await asyncio.wait_for(get_gpt_response(prompt), timeout=60)
+        if not content:
+            await status.edit_text("⚠️ No response from GPT.")
+        else:
+            await status.edit_text(format_response(model_name, content))
     except Exception as e:
-        await message.reply_text(f"An error occurred: {e}")
-    finally:
-        await lexica_client.close()
+        await status.edit_text(f"❌ {e}")
 
+# ---------------------------
+# Command Handlers
+# ---------------------------
+@app.on_message(filters.command("gpt"))
+async def gpt_handler(client: Client, message: Message):
+    await handle_text_model(message, "GPT")
 
 @app.on_message(filters.command("bard"))
 async def bard_handler(client: Client, message: Message):
-    await handle_text_model(message, languageModels.bard, "Bard")
-
+    await handle_text_model(message, "Bard")
 
 @app.on_message(filters.command("gemini"))
 async def gemini_handler(client: Client, message: Message):
-    await handle_text_model(message, languageModels.gemini, "Gemini", as_messages=True)
-
-
-@app.on_message(filters.command("gpt"))
-async def gpt_handler(client: Client, message: Message):
-    await handle_text_model(message, languageModels.gpt, "GPT", as_messages=True)
-
+    await handle_text_model(message, "Gemini")
 
 @app.on_message(filters.command("llama"))
 async def llama_handler(client: Client, message: Message):
-    await handle_text_model(message, languageModels.llama, "LLaMA", as_messages=True)
-
+    await handle_text_model(message, "LLaMA")
 
 @app.on_message(filters.command("mistral"))
 async def mistral_handler(client: Client, message: Message):
-    await handle_text_model(message, languageModels.mistral, "Mistral", as_messages=True)
+    await handle_text_model(message, "Mistral")
 
-
+# ---------------------------
+# GeminiVision (image) handler — uses text fallback
+# ---------------------------
 @app.on_message(filters.command("geminivision"))
 async def geminivision_handler(client: Client, message: Message):
-    if not (message.reply_to_message and message.reply_to_message.photo):
-        return await message.reply_text("Please reply to an image with the /geminivision command and a prompt.")
+    if not (message.reply_to_message and (message.reply_to_message.photo or message.reply_to_message.document)):
+        return await message.reply_text("🖼️ Please reply to an image with /geminivision and a prompt.")
 
     prompt = get_prompt(message)
     if not prompt:
-        return await message.reply_text("Please provide a prompt after the command.")
+        return await message.reply_text("❌ Please provide a prompt after the command.")
 
     await client.send_chat_action(message.chat.id, ChatAction.TYPING)
-    status = await message.reply_text("Processing your image, please wait...")
+    status = await message.reply_text("🧩 Processing your image, please wait...")
 
-
+    file_path = None
     try:
-        file_path = await client.download_media(message.reply_to_message.photo.file_id)
-    except Exception as e:
-        await status.delete()
-        return await message.reply_text(f"❌ Failed to download image.\nError: {e}")
-
-    lexica_client = AsyncClient()
-
-    try:
+        file_path = await client.download_media(message.reply_to_message.photo or message.reply_to_message.document)
         with open(file_path, "rb") as f:
-            data = base64.b64encode(f.read()).decode()
-        mime_type, _ = mimetypes.guess_type(file_path)
-        image_info = [{"data": data, "mime_type": mime_type}]
-
-        response = await lexica_client.ChatCompletion(prompt, languageModels.geminiVision, images=image_info)
-        content = extract_content(response)
-        await message.reply_text(format_response("Gemini Vision", content) if content else "No content received from the API.")
+            img_data = base64.b64encode(f.read()).decode()
+        fake_prompt = f"[Image included]\n{prompt}"
+        content = await get_gpt_response(fake_prompt)
+        await status.edit_text(format_response("Gemini Vision", content))
     except Exception as e:
-        await message.reply_text(f"An error occurred: {e}")
+        await status.edit_text(f"❌ Error: {e}")
     finally:
-        await status.delete()
-        await lexica_client.close()
-        os.remove(file_path)
+        if file_path and os.path.exists(file_path):
+            try:
+                os.remove(file_path)
+            except:
+                pass

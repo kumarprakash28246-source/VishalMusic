@@ -1,39 +1,55 @@
+# ANNIEMUSIC/plugins/tools/gpt.py
 import asyncio
 import os
+import aiohttp
 from gtts import gTTS
-
 from pyrogram import Client, filters
 from pyrogram.types import Message
 from pyrogram.enums import ChatAction
-
-from lexica import AsyncClient, languageModels, Messages
 from VISHALMUSIC import app
+from dotenv import load_dotenv  # ✅ Added for environment variables
 
+# -----------------------------
+# 🧠 Load environment variables
+# -----------------------------
+load_dotenv()
+OPENROUTER_KEY = os.getenv("OPENROUTER_KEY")  # 👈 .env se load hoga
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
-def extract_content(response) -> str:
-    if isinstance(response, dict):
-        return response.get("content", "No content available.")
-    return str(response)
+if not OPENROUTER_KEY:
+    raise Exception("❌ Missing OPENROUTER_KEY in .env file")
 
-
-async def get_gpt_response(prompt: str) -> str:
-    lexica_client = AsyncClient()
+# -----------------------------
+# 🔧 GPT API — OpenRouter
+# -----------------------------
+async def get_gpt_response(prompt: str, model: str = "gpt-3.5-turbo") -> str:
     try:
-        messages = [Messages(content=prompt, role="user")]
-        response = await lexica_client.ChatCompletion(messages, languageModels.gpt)
-        return extract_content(response)
-    finally:
-        await lexica_client.close()
+        headers = {
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {OPENROUTER_KEY}",
+        }
+        data = {
+            "model": model,
+            "messages": [{"role": "user", "content": prompt}],
+        }
+        async with aiohttp.ClientSession() as session:
+            async with session.post(OPENROUTER_URL, headers=headers, json=data, timeout=60) as resp:
+                if resp.status != 200:
+                    text = await resp.text()
+                    raise Exception(f"API Error {resp.status}: {text}")
+                result = await resp.json()
+                return result["choices"][0]["message"]["content"]
+    except Exception as e:
+        raise Exception(f"❌ GPT Error: {e}")
 
-
+# -----------------------------
 async def safe_gpt_response(prompt: str, timeout: int = 30) -> str:
     try:
         return await asyncio.wait_for(get_gpt_response(prompt), timeout=timeout)
     except asyncio.TimeoutError:
-        raise Exception("⚠️ GPT request timed out. Please try a shorter prompt.")
+        raise Exception("⚠️ GPT request timed out.")
     except Exception as e:
-        raise Exception(f"❌ GPT Error: {e}")
-
+        raise Exception(str(e))
 
 async def send_typing_action(client: Client, chat_id: int, interval: int = 3):
     try:
@@ -43,16 +59,18 @@ async def send_typing_action(client: Client, chat_id: int, interval: int = 3):
     except asyncio.CancelledError:
         pass
 
-
-def _build_fullname(first_name: str | None, last_name: str | None, username: str | None) -> str:
+def _build_fullname(first_name, last_name, username):
     first = first_name or ""
     last = (last_name or "").strip()
     full = (f"{first} {last}".strip()) or (f"@{username}" if username else "")
     return full or "there"
 
-
-def _user_mention_text(user) -> str:
-    full = _build_fullname(getattr(user, "first_name", None), getattr(user, "last_name", None), getattr(user, "username", None))
+def _user_mention_text(user):
+    full = _build_fullname(
+        getattr(user, "first_name", None),
+        getattr(user, "last_name", None),
+        getattr(user, "username", None),
+    )
     mention_attr = getattr(user, "mention", None)
     if callable(mention_attr):
         try:
@@ -61,8 +79,7 @@ def _user_mention_text(user) -> str:
             pass
     return f"[{full}](tg://user?id={user.id})"
 
-
-def get_requester_identity(message: Message) -> tuple[str, str]:
+def get_requester_identity(message: Message):
     if message.from_user:
         u = message.from_user
         full = _build_fullname(u.first_name, getattr(u, "last_name", None), getattr(u, "username", None))
@@ -72,74 +89,82 @@ def get_requester_identity(message: Message) -> tuple[str, str]:
         return title, title
     return "there", "there"
 
-
-async def process_query(client: Client, message: Message, tts: bool = False):
+# -----------------------------
+async def process_query(client: Client, message: Message, tts: bool = False, model: str = "gpt-3.5-turbo"):
     full, mention = get_requester_identity(message)
-
     if len(message.command) < 2:
-        return await message.reply_text(
-            f"Hello {mention}, how can I assist you today?",
-            disable_web_page_preview=True
-        )
-
-    if not message.text:
-        return await message.reply_text("Please provide a prompt after the command.")
+        return await message.reply_text(f"✨ ʜᴇʏ {mention}, ɪ’ᴍ ˹𝐀ɴɴɪᴇ ✘ 𝙰ɪ˼ 💫\nAsk me anything!")
 
     query = message.text.split(" ", 1)[1].strip()
-
     if len(query) > 4000:
-        return await message.reply_text("❌ Your prompt is too long (max 4000 characters). Please shorten it.")
+        return await message.reply_text("❌ Prompt too long (max 4000 chars).")
 
     audio_file = "response.mp3"
     typing_task = asyncio.create_task(send_typing_action(client, message.chat.id))
 
     try:
-        content = await safe_gpt_response(query, timeout=30)
-
+        content = await safe_gpt_response(query, timeout=40)
         if not content:
             return await message.reply_text("⚠️ No response from GPT.")
 
+        styled = (
+            f"✨ ʜᴇʏ {mention},\n"
+            f"ɪ’ᴍ ˹𝐀ɴɴɪᴇ ✘ 𝙰ɪ˼ 💫\n"
+            f"──────────────\n"
+            f"🧠 ʀᴇsᴘᴏɴsᴇ:\n{content}"
+        )
+
         if tts:
-            if len(content) > 1000:
-                content = content[:1000] + "..."
-            tts_engine = gTTS(text=content, lang="en")
-            tts_engine.save(audio_file)
-            await client.send_voice(chat_id=message.chat.id, voice=audio_file)
+            try:
+                tts_engine = gTTS(text=content[:1000], lang="en")
+                tts_engine.save(audio_file)
+                await client.send_voice(
+                    chat_id=message.chat.id,
+                    voice=audio_file,
+                    caption=styled
+                )
+            except Exception as tts_error:
+                await message.reply_text(f"❌ Voice generation error: {tts_error}")
         else:
-            if len(content) > 4096:
-                for i in range(0, len(content), 4096):
-                    await message.reply_text(content[i:i+4096])
-            else:
-                await message.reply_text(content)
+            for i in range(0, len(styled), 4096):
+                await message.reply_text(styled[i:i+4096])
 
     except Exception as e:
         await message.reply_text(str(e))
-
     finally:
         typing_task.cancel()
         if os.path.exists(audio_file):
-            os.remove(audio_file)
+            try:
+                os.remove(audio_file)
+            except:
+                pass
 
-
-@app.on_message(filters.command(["arvis"], prefixes=["j", "J"]))
-async def jarvis_handler(client: Client, message: Message):
+# -----------------------------
+# COMMANDS
+# -----------------------------
+@app.on_message(filters.command(["ai", "gpt", "bard", "gemini", "llama", "mistral"], prefixes=["/", ".", "-", "+", "?", "$"]))
+async def gpt_handler(client: Client, message: Message):
+    model_map = {
+        "ai": "gpt-3.5-turbo",
+        "gpt": "gpt-3.5-turbo",
+        "bard": "google/gemini-flash-1.5",
+        "gemini": "google/gemini-pro",
+        "llama": "meta-llama/llama-3-8b-chat",
+        "mistral": "mistralai/mistral-7b-instruct",
+    }
+    cmd = message.command[0].lower()
+    model = model_map.get(cmd, "gpt-3.5-turbo")
     try:
-        await asyncio.wait_for(process_query(client, message), timeout=60)
+        await asyncio.wait_for(process_query(client, message, model=model), timeout=60)
     except asyncio.TimeoutError:
-        await message.reply_text("⏳ Timeout. Please try again with a shorter prompt.")
+        await message.reply_text("⏳ Timeout. Try again with a shorter prompt.")
 
-
-@app.on_message(filters.command(["chatgpt", "ai", "ask", "Master"], prefixes=["+", ".", "/", "-", "?", "$", "#", "&"]))
-async def chatgpt_handler(client: Client, message: Message):
-    try:
-        await asyncio.wait_for(process_query(client, message), timeout=60)
-    except asyncio.TimeoutError:
-        await message.reply_text("⏳ Timeout. Please try again with a shorter prompt.")
-
-
-@app.on_message(filters.command(["ssis"], prefixes=["a", "A"]))
-async def vishal_tts_handler(client: Client, message: Message):
+# -----------------------------
+# ANNIE AI VOICE MODE
+# -----------------------------
+@app.on_message(filters.command(["assis", "aivoice"], prefixes=["/", ".", "a", "A"]))
+async def annie_tts_handler(client: Client, message: Message):
     try:
         await asyncio.wait_for(process_query(client, message, tts=True), timeout=60)
     except asyncio.TimeoutError:
-        await message.reply_text("⏳ Timeout. Please try again with a shorter prompt.")
+        await message.reply_text("⏳ Timeout. Try again with a shorter prompt.")
