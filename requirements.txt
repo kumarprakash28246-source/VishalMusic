@@ -14,6 +14,7 @@ gitpython
 google-api-python-client
 gpytranslate
 gtts
+groq
 heroku3
 httpx[http2]==0.28.1
 kurigram==2.2.13
