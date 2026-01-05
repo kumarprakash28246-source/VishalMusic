@@ -7,11 +7,11 @@ from pyrogram import filters
 load_dotenv()
 
 # ── Core bot config ────────────────────────────────────────────────────────────
-API_ID = int(getenv("API_ID", 26493077))
-API_HASH = getenv("API_HASH", "6586f0276c7748e54684719bdd247d90")
+API_ID = int(getenv("API_ID", 33751409))
+API_HASH = getenv("API_HASH", "232b6ce65e539b5b20a8d55e23bbaf95")
 BOT_TOKEN = getenv("BOT_TOKEN")
 
-OWNER_ID = int(getenv("OWNER_ID", 7044783841))
+OWNER_ID = int(getenv("OWNER_ID", 8049860433))
 OWNER_USERNAME = getenv("OWNER_USERNAME", "DENVER_MODZ_OWNER1")
 BOT_USERNAME = getenv("BOT_USERNAME", "Shrutimusic_bot")
 BOT_NAME = getenv("BOT_NAME", "𝐒ʜʀᴜᴛɪ ✘ 𝙼ᴜsɪᴄ˼ ♪")
@@ -19,7 +19,7 @@ ASSUSERNAME = getenv("ASSUSERNAME", "𝐒ʜʀᴜᴛɪ ✘ ᴀꜱꜱɪꜱᴛᴀɴ
 
 # ── Database & logging ─────────────────────────────────────────────────────────
 MONGO_DB_URI = getenv("MONGO_DB_URI")
-LOGGER_ID = int(getenv("LOGGER_ID", -1002425220992))
+LOGGER_ID = int(getenv("LOGGER_ID", -1003522324321))
 
 # ── Limits (durations in min/sec; sizes in bytes) ──────────────────────────────
 DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 300))
@@ -40,13 +40,13 @@ HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
 # ── Git / updates ──────────────────────────────────────────────────────────────
-UPSTREAM_REPO = getenv("UPSTREAM_REPO", "https://github.com/ItsMeVishal0/VishalMusic.git")
+UPSTREAM_REPO = getenv("UPSTREAM_REPO", "https://github.com/kumarprakash28246-source/VishalMusic.git")
 UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "Master")
 GIT_TOKEN = getenv("GIT_TOKEN")  # needed if repo is private
 
 # ── Support links ──────────────────────────────────────────────────────────────
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/ItsMeVishalBots")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/ItsMeVishalSupport")
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/misstannu1")
+SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/misstannu1")
 
 # ── Assistant auto-leave ───────────────────────────────────────────────────────
 AUTO_LEAVING_ASSISTANT = False
