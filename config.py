@@ -1,151 +1,134 @@
 import re
 from os import getenv
+
 from dotenv import load_dotenv
 from pyrogram import filters
 
-# Load environment variables from .env file
 load_dotenv()
 
-# ── Core bot config ────────────────────────────────────────────────────────────
-API_ID = int(getenv("API_ID", 33751409))
-API_HASH = getenv("API_HASH", "232b6ce65e539b5b20a8d55e23bbaf95")
+# Get this value from my.telegram.org/apps
+API_ID = int(getenv("API_ID", 39331374))
+API_HASH = getenv("API_HASH", "e75ee6a8727111eb718e4c77195af9eb")
+
+# Get your token from @BotFather on Telegram.
 BOT_TOKEN = getenv("BOT_TOKEN")
 
-OWNER_ID = int(getenv("OWNER_ID", 8049860433))
-OWNER_USERNAME = getenv("OWNER_USERNAME", "DENVER_MODZ_OWNER1")
-BOT_USERNAME = getenv("BOT_USERNAME", "Shrutimusic_bot")
-BOT_NAME = getenv("BOT_NAME", "𝐒ʜʀᴜᴛɪ ✘ 𝙼ᴜsɪᴄ˼ ♪")
-ASSUSERNAME = getenv("ASSUSERNAME", "𝐒ʜʀᴜᴛɪ ✘ ᴀꜱꜱɪꜱᴛᴀɴᴛ˼")
+# Get your mongo url from cloud.mongodb.com
+MONGO_DB_URI = getenv("MONGO_DB_URI", mongodb+srv://aarubhakar302:effOLpfZ0awCjQxz@cluster0.byhbxty.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0)
 
-# ── Database & logging ─────────────────────────────────────────────────────────
-MONGO_DB_URI = getenv("MONGO_DB_URI")
-LOGGER_ID = int(getenv("LOGGER_ID", -1003522324321))
+DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 360))
 
-# ── Limits (durations in min/sec; sizes in bytes) ──────────────────────────────
-DURATION_LIMIT_MIN = int(getenv("DURATION_LIMIT", 300))
-SONG_DOWNLOAD_DURATION = int(getenv("SONG_DOWNLOAD_DURATION", "1200"))
-SONG_DOWNLOAD_DURATION_LIMIT = int(getenv("SONG_DOWNLOAD_DURATION_LIMIT", "1800"))
-TG_AUDIO_FILESIZE_LIMIT = int(getenv("TG_AUDIO_FILESIZE_LIMIT", "157286400"))
-TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", "1288490189"))
-PLAYLIST_FETCH_LIMIT = int(getenv("PLAYLIST_FETCH_LIMIT", "30"))
+# Chat id of a group for logging bot's activities
+LOG_GROUP_ID = int(getenv("LOG_GROUP_ID"", -1003522324321))
 
-# ── External APIs ──────────────────────────────────────────────────────────────
-COOKIE_URL = getenv("COOKIE_URL")  # required (paste link)
-API_URL = getenv("API_URL")        # optional
-API_KEY = getenv("API_KEY")        # optional
-DEEP_API = getenv("DEEP_API")      # optional
+# Get this value from @MissRose_Bot on Telegram by /id
+OWNER_ID = int(getenv("OWNER_ID", 8501776264))
 
-# ── Hosting / deployment ───────────────────────────────────────────────────────
+## Fill these variables if you're deploying on heroku.
+# Your heroku app name
 HEROKU_APP_NAME = getenv("HEROKU_APP_NAME")
+# Get it from http://dashboard.heroku.com/account
 HEROKU_API_KEY = getenv("HEROKU_API_KEY")
 
-# ── Git / updates ──────────────────────────────────────────────────────────────
-UPSTREAM_REPO = getenv("UPSTREAM_REPO", "https://github.com/kumarprakash28246-source/VishalMusic.git")
-UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "Master")
-GIT_TOKEN = getenv("GIT_TOKEN")  # needed if repo is private
+API_URL = getenv("API_URL", 'https://api.nexgenbots.xyz') #youtube song url
+VIDEO_API_URL = getenv("VIDEO_API_URL", 'https://api.video.nexgenbots.xyz')
+API_KEY = getenv("API_KEY", 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) # youtube song api key, generate free key or buy paid plan @SourabhProfessor
 
-# ── Support links ──────────────────────────────────────────────────────────────
-SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/misstannu1")
-SUPPORT_CHAT = getenv("SUPPORT_CHAT", "https://t.me/misstannu1")
+UPSTREAM_REPO = getenv(
+    "UPSTREAM_REPO",
+    "https://github.com/kumarprakash28246-source/MusicBot",
+)
+UPSTREAM_BRANCH = getenv("UPSTREAM_BRANCH", "master")
+GIT_TOKEN = getenv(
+    "GIT_TOKEN", None
+)  # Fill this variable if your upstream repository is private
 
-# ── Assistant auto-leave ───────────────────────────────────────────────────────
-AUTO_LEAVING_ASSISTANT = False
-AUTO_LEAVE_ASSISTANT_TIME = int(getenv("ASSISTANT_LEAVE_TIME", "3600"))
+SUPPORT_CHANNEL = getenv("SUPPORT_CHANNEL", "https://t.me/prakriti_music")
+SUPPORT_GROUP = getenv("SUPPORT_GROUP", "https://t.me/prakriti_music")
 
-# ── Debug ──────────────────────────────────────────────────────────────────────
-DEBUG_IGNORE_LOG = True
+# Set this to True if you want the assistant to automatically leave chats after an interval
+AUTO_LEAVING_ASSISTANT = bool(getenv("AUTO_LEAVING_ASSISTANT", False))
 
-# ── Spotify (optional) ─────────────────────────────────────────────────────────
-SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", "22b6125bfe224587b722d6815002db2b")
-SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", "c9c63c6fbf2f467c8bc68624851e9773")
+# make your bots privacy from telegra.ph and put your url here 
+PRIVACY_LINK = getenv("PRIVACY_LINK", "https://telegra.ph/Privacy-Policy-for-AviaxMusic-08-14")
 
-# ── Session strings (optional) ─────────────────────────────────────────────────
+
+# Get this credentials from https://developer.spotify.com/dashboard
+SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID", None)
+SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET", None)
+
+
+# Maximum limit for fetching playlist's track from youtube, spotify, apple links.
+PLAYLIST_FETCH_LIMIT = int(getenv("PLAYLIST_FETCH_LIMIT", 25))
+
+
+# Telegram audio and video file size limit (in bytes)
+TG_AUDIO_FILESIZE_LIMIT = int(getenv("TG_AUDIO_FILESIZE_LIMIT", 104857600))
+TG_VIDEO_FILESIZE_LIMIT = int(getenv("TG_VIDEO_FILESIZE_LIMIT", 2145386496))
+# Checkout https://www.gbmb.org/mb-to-bytes for converting mb to bytes
+
+
+# Get your pyrogram v2 session from Replit
 STRING1 = getenv("STRING_SESSION")
 STRING2 = getenv("STRING_SESSION2")
 STRING3 = getenv("STRING_SESSION3")
 STRING4 = getenv("STRING_SESSION4")
 STRING5 = getenv("STRING_SESSION5")
 
-# ── Media assets ───────────────────────────────────────────────────────────────
-START_VIDS = [
-    "https://files.catbox.moe/7rie2i.mp4",
-    "https://files.catbox.moe/j3ba3f.mp4",
-    "https://files.catbox.moe/mfeisv.mp4",
-    "https://files.catbox.moe/ot88at.mp4",
-    "https://files.catbox.moe/bv29a4.mp4",
-    "https://files.catbox.moe/pndpqt.mp4",
-    "https://files.catbox.moe/tu8l7e.mp4",
-    "https://files.catbox.moe/7ygvch.mp4",
-    "https://files.catbox.moe/jh55tl.mp4",
-]
-STICKERS = [
-    "CAACAgUAAyEFAASQje-AAAI92mkOFHmOlyKv0vEpoJE6S7ZInIuPAALbFQACSZmpVI0wvAnbSnk9HgQ",
-    "CAACAgQAAyEFAASQje-AAAI92GkOFFx4j5i7GwlGsRbvXBaZbgquAAIoFQACir5JU9xIMA-J9yY7HgQ",
-    "CAACAgQAAyEFAASQje-AAAI91mkOFEeMiZrau4LoUgHQAuhfVUNoAAJbHQACmKWIUVKzS9qKs-juHgQ",
-    "CAACAgUAAyEFAASQje-AAAI91GkOFDevrsTZ_JzDdyHdsu2VhsvHAAJ2EwAC_xfYVo5iQw7a3JPfHgQ",
-    "CAACAgUAAyEFAASQje-AAAI90mkOFCn95GwjE62nWBG2o9H-FK15AAJgFQACJ_uwVMGj96qQgd3hHgQ",
-    "CAACAgQAAyEFAASQje-AAAI90GkOFCDWtQkvBiumJxSoedz0NqvLAAIzFAAC9ED4UX1Ta6URzlyIHgQ",
-]
-HELP_IMG_URL = "https://files.catbox.moe/a6sz5r.jpg"
-PING_VID_URL = "https://files.catbox.moe/qibmue.mp4"
-PLAYLIST_IMG_URL = "https://files.catbox.moe/h9dan0.jpg"
-STATS_VID_URL = "https://files.catbox.moe/a6sz5r.jpg"
-TELEGRAM_AUDIO_URL = "https://files.catbox.moe/s8yhxr.jpg"
-TELEGRAM_VIDEO_URL = "https://files.catbox.moe/a6sz5r.jpg"
-STREAM_IMG_URL = "https://files.catbox.moe/h9dan0.jpg"
-SOUNCLOUD_IMG_URL = "https://files.catbox.moe/a6sz5r.jpg"
-YOUTUBE_IMG_URL = "https://files.catbox.moe/a6sz5r.jpg"
-SPOTIFY_ARTIST_IMG_URL = SPOTIFY_ALBUM_IMG_URL = SPOTIFY_PLAYLIST_IMG_URL = YOUTUBE_IMG_URL
 
-# ── Helpers ────────────────────────────────────────────────────────────────────
-def time_to_seconds(time: str) -> int:
-    return sum(int(x) * 60**i for i, x in enumerate(reversed(time.split(":"))))
-
-DURATION_LIMIT = time_to_seconds(f"{DURATION_LIMIT_MIN}:00")
-
-# ───── Bot Introduction Messages ───── #
-AYU = [
-    "❤️", "💞", "🩷", "💋", "🌹", "💫", "💖", "✨", "💘", "💝",
-    "💕", "💗", "💓", "💟", "❣️", "🌸", "🌼", "💐", "🪷", "🌺",
-    "💎", "🌙", "🌟", "🌈", "🦋", "🥰", "😍", "😘", "😚", "😻",
-    "🤍", "💛", "💚", "💙", "💜", "🖤", "🤎", "🩵", "🩶", "💏",
-    "💑", "💍", "💌", "💎", "🌹", "💖", "💘", "💝", "💗", "💞",
-    "❤️‍🔥", "❤️‍🩹", "💓", "💟", "💃", "🕺", "🎶", "🎵", "🎧", "💫",
-    "✨", "🌈", "🌸", "🌺", "🌷", "🌼", "🍀", "🥂", "🍫", "🍓",
-    "🍒", "🍑", "🫶", "🤗", "🤭", "🥹", "💃", "🎀", "💄", "💅",
-    "🕊️", "🐦", "🌌", "🎇", "🎆", "🌠", "🪩", "🎉", "🎊", "🥳",
-    "💞", "💖", "💘", "💝", "💗", "💓", "❤️", "💋", "🌹", "✨",
-    "💫", "🌈", "🦋", "💟", "💍", "💎", "🌸", "🥰", "😍", "💌"
-]
-
-AYUV = [
-    "💌✨ ʜᴇʟʟᴏ {0} 💞🦋\n\n🌹 ɪᴛ'ꜱ ᴍᴇ {1} 💖💫\n\n┏━━━━━━━━━━━━━━━⧫\n┃ 💫 ꜱᴜᴘᴘᴏʀᴛᴇᴅ ᴘʟᴀᴛꜰᴏʀᴍꜱ:\n┃ 🎵 ʏᴏᴜᴛᴜʙᴇ | ꜱᴘᴏᴛɪꜰʏ | ʀᴇꜱꜱᴏ | ᴀᴘᴘʟᴇᴍᴜꜱɪᴄ | ꜱᴏᴜɴᴅᴄʟᴏᴜᴅ 💌\n┃\n┃ 🔥 ᴜᴘᴛɪᴍᴇ : {2} 🌙\n┃ 💖 ꜱᴇʀᴠᴇʀ sᴛᴏʀᴀɢᴇ : {3} 💫\n┃ ⚡ ᴄᴘᴜ ʟᴏᴀᴅ : {4} 💞\n┃ 🩷 ʀᴀᴍ ᴄᴏɴsᴜᴍᴘᴛɪᴏɴ : {5} 🦋\n┃ 🌈 ᴜsᴇʀs : {6} 💌\n┃ 🕊️ ᴄʜᴀᴛs : {7} 💫\n┗━━━━━━━━━━━━━━━⧫\n\n💌 ᴅᴇᴠᴇʟᴏᴩᴇʀ ➪ [»»—⎯⁠⁠⁠⁠‌꯭꯭@DENVER_MODZ_OWNER1𝅃 ₊꯭♡゙꯭. »︎](https://t.me/DENVER_MODZ_OWNER1) 🌹✨",
-
-    "💖🌹 ʜɪ {0} 💫🦋\n\n✨ ɪ'ᴍ {1} 💞 ᴛᴇʟᴇɢʀᴀᴍ ᴍᴜꜱɪᴄ ʙᴏᴛ 🔥\n\n┏━━━━━━━━━━━━━━━⧫\n┃ 🌟 ꜰᴇᴀᴛᴜʀᴇꜱ:\n┃ 🎵 sᴜᴘᴇʀꜰᴀsᴛ ᴠᴄ ᴘʟᴀʏᴇʀ 💌\n┃ 🎶 ᴘʟᴀʏ ᴍᴜꜱɪᴄ & ᴠɪᴅᴇᴏ 💫\n┃ 🌈 ʟɪᴠᴇ ꜱᴛʀᴇᴀᴍɪɴɢ 🕊️\n┃ 🩷 24x7 ᴍᴜꜱɪᴄ ᴄʜɪʟʟ 💖\n┃ 💌 ɴᴏ ᴘʀᴏᴍᴏ 🌹\n┃\n┃ 🔥 ᴜᴘᴛɪᴍᴇ : {2} 💫\n┃ 💖 ꜱᴇʀᴠᴇʀ sᴛᴏʀᴀɢᴇ : {3} 🌈\n┃ ⚡ ᴄᴘᴜ ʟᴏᴀᴅ : {4} 💞\n┃ 🩷 ʀᴀᴍ ᴄᴏɴsᴜᴍᴘᴛɪᴏɴ : {5} 🦋\n┃ 🌹 ᴜsᴇʀs : {6} 💌\n┃ 🕊️ ᴄʜᴀᴛs : {7} 💫\n┗━━━━━━━━━━━━━━━⧫\n\n💌 ᴅᴇᴠᴇʟᴏᴩᴇʀ ➪ [»»—⎯⁠⁠⁠⁠‌꯭꯭@DENVER_MODZ_OWNER1𝅃 ₊꯭♡゙꯭. »](https://t.me/DENVER_MODZ_OWNER1) 💖🌸",
-]
-
-# ── Runtime structures ─────────────────────────────────────────────────────────
 BANNED_USERS = filters.user()
-adminlist, lyrical, votemode, autoclean, confirmer = {}, {}, {}, [], {}
+adminlist = {}
+lyrical = {}
+votemode = {}
+autoclean = []
+confirmer = {}
 
-# ── Minimal validation ─────────────────────────────────────────────────────────
-if SUPPORT_CHANNEL and not re.match(r"^https?://", SUPPORT_CHANNEL):
-    raise SystemExit("[ERROR] - Invalid SUPPORT_CHANNEL URL. Must start with https://")
 
-if SUPPORT_CHAT and not re.match(r"^https?://", SUPPORT_CHAT):
-    raise SystemExit("[ERROR] - Invalid SUPPORT_CHAT URL. Must start with https://")
+START_IMG_URL = getenv(
+    "START_IMG_URL", "https://files.catbox.moe/gw8a1t.jpg"
+)
+PING_IMG_URL = getenv(
+    "PING_IMG_URL", "https://graph.org//file/389a372e8ae039320ca6c.png"
+)
+PLAYLIST_IMG_URL = "https://graph.org//file/3dfcffd0c218ead96b102.png"
+STATS_IMG_URL = "https://graph.org//file/99a8a9c13bb01f9ac7d98.png"
+TELEGRAM_AUDIO_URL = "https://graph.org//file/2f7debf856695e0ef0607.png"
+TELEGRAM_VIDEO_URL = "https://graph.org//file/2f7debf856695e0ef0607.png"
+STREAM_IMG_URL = "https://te.legra.ph/file/bd995b032b6bd263e2cc9.jpg"
+SOUNCLOUD_IMG_URL = "https://te.legra.ph/file/bb0ff85f2dd44070ea519.jpg"
+YOUTUBE_IMG_URL = "https://graph.org//file/2f7debf856695e0ef0607.png"
+SPOTIFY_ARTIST_IMG_URL = "https://te.legra.ph/file/37d163a2f75e0d3b403d6.jpg"
+SPOTIFY_ALBUM_IMG_URL = "https://te.legra.ph/file/b35fd1dfca73b950b1b05.jpg"
+SPOTIFY_PLAYLIST_IMG_URL = "https://te.legra.ph/file/95b3ca7993bbfaf993dcb.jpg"
 
-if not COOKIE_URL:
-    raise SystemExit("[ERROR] - COOKIE_URL is required.")
 
-# Only allow these cookie link formats
-if not re.match(r"^https://(batbin\.me|pastebin\.com)/[A-Za-z0-9]+$", COOKIE_URL):
-    raise SystemExit("[ERROR] - Invalid COOKIE_URL. Use https://batbin.me/<id> or https://pastebin.com/<id>")
-    
-    
-print("""
-╔════════════════════════════════════╗
-║🎵 𝗣𝗥𝗔𝗞𝗔𝗦𝗛 𝗠𝗨𝗦𝗜𝗖 𝗕𝗢𝗧 𝗣𝗥𝗘𝗠𝗜𝗨𝗠 𝗘𝗗𝗜𝗧𝗜𝗢𝗡  
-║       ✦ 𝗖𝗼𝗻𝗳𝗶𝗴 𝗟𝗼𝗮𝗱𝗲𝗱 𝗦𝘂𝗰𝗰𝗲𝘀𝘀! ✦   
-╚════════════════════════════════════╝
-""")
+def time_to_seconds(time):
+    stringt = str(time)
+    return sum(int(x) * 60**i for i, x in enumerate(reversed(stringt.split(":"))))
+
+
+DURATION_LIMIT = int(time_to_seconds(f"{DURATION_LIMIT_MIN}:00"))
+
+
+if SUPPORT_CHANNEL:
+    if not re.match("(?:http|https)://", SUPPORT_CHANNEL):
+        raise SystemExit(
+            "[ERROR] - Your SUPPORT_CHANNEL url is wrong. Please ensure that it starts with https://"
+        )
+
+if SUPPORT_GROUP:
+    if not re.match("(?:http|https)://", SUPPORT_GROUP):
+        raise SystemExit(
+            "[ERROR] - Your SUPPORT_GROUP url is wrong. Please ensure that it starts with https://"
+        )
+
+
+
+
+
+
+
+
+
+
+
