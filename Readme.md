@@ -123,7 +123,7 @@ COOKIE_URL Secure Paste Service Export YouTube cookies → Upload to paste servi
   <table>
     <tr>
       <td align="center">
-        <a href="http://dashboard.heroku.com/new?template=https://github.com/ItsMeVishal0/VishalMusic">
+        <a href="http://dashboard.heroku.com/new?template=https://github.com/kumarprakash28246-source/VishalMusic.git">
           <img src="https://img.shields.io/badge/🚀_HEROKU_DEPLOY-430098?style=for-the-badge&logo=heroku&logoColor=white&labelColor=000000" width="250"/>
         </a>
         <br>
